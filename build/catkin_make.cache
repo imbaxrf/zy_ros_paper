@@ -1,2 +1,0 @@
-
--DCATKIN_DEVEL_PREFIX=/root/zy_ros_paper/devel -DCMAKE_INSTALL_PREFIX=/root/zy_ros_paper/install -G Unix Makefiles
