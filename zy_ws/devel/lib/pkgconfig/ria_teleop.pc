@@ -1,8 +1,0 @@
-prefix=/root/zy_ros_paper/zy_ws/devel
-
-Name: ria_teleop
-Description: Description of ria_teleop
-Version: 0.0.0
-Cflags: -I/root/zy_ros_paper/zy_ws/devel/include
-Libs: -L${prefix}/lib 
-Requires: roscpp rospy std_msgs message_runtime

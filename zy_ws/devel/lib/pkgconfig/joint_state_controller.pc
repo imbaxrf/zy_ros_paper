@@ -1,8 +1,0 @@
-prefix=/root/zy_ros_paper/zy_ws/devel
-
-Name: joint_state_controller
-Description: Description of joint_state_controller
-Version: 0.18.1
-Cflags: -I/root/zy_ros_paper/zy_ws/src/joint_state_controller/include
-Libs: -L${prefix}/lib -ljoint_state_controller
-Requires: controller_interface hardware_interface realtime_tools roscpp sensor_msgs

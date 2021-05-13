@@ -1,8 +1,0 @@
-prefix=/root/zy_ros_paper/zy_ws/devel
-
-Name: e100_description
-Description: Description of e100_description
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
