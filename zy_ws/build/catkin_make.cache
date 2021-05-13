@@ -1,2 +1,0 @@
-ria_model_sim/ria_description:ria_model_sim/ria_navigation:ria_model_sim/ria_teleop:teleop_twist_keyboard
--DCATKIN_DEVEL_PREFIX=/root/zy_ros_paper/zy_ws/devel -DCMAKE_INSTALL_PREFIX=/root/zy_ros_paper/zy_ws/install -G Unix Makefiles
