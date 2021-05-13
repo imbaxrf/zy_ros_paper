@@ -1,0 +1,8 @@
+prefix=/root/zy_ros_paper/zy_ws/devel
+
+Name: force_torque_sensor_controller
+Description: Description of force_torque_sensor_controller
+Version: 0.18.1
+Cflags: -I/root/zy_ros_paper/zy_ws/src/force_torque_sensor_controller/include
+Libs: -L${prefix}/lib -lforce_torque_sensor_controller
+Requires: controller_interface geometry_msgs hardware_interface realtime_tools roscpp
