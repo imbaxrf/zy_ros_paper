@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+
+<robot name="RIA-R100" xmlns:xacro="http://www.ros.org/wiki/xacro">
+   <xacro:include filename="$(find ria_description)/urdf/ria.gazebo" />
+   <xacro:include filename="$(find ria_description)/urdf/materials.urdf.xacro" />
+   <xacro:include filename="$(find ria_description)/urdf/property.urdf.xacro"/>
+   <xacro:include filename="$(find ria_description)/urdf/wheel.urdf.xacro"/>
+ <xacro:include filename="$(find ria_description)/urdf/orbbec_astra_gazebo.urdf.xacro"/>
+     <xacro:include filename="$(find ria_description)/urdf/sick_tim571_gazebo.urdf.xacro"/>
+
+
+  <sensor_orbbec  parent="base_link"/>
+  <sensor_sick_tim571  parent="base_link"/>
+ <link name="base_footprint" >
+	<visual>
+	   <geometry>
+              <cylinder radius="0.03" length="0.01"/>
+	   </geometry>
+           <origin rpy="0 0 0" xyz="0 0 0"/>
+	</visual>
+	<collision>
+	   <geometry>
+              <cylinder radius="0.03" length="0.01"/>
+	   </geometry>
+           <origin rpy="0 0 0" xyz="0 0 0"/>
+	</collision>   
+   </link>
+
+   <link name="base_link" >
+	<visual>
+	   <geometry>
+	      <box size="0.03 0.03 0.03" />
+	   </geometry>
+           <material name="Green"/>
+           <origin rpy="0 0 0" xyz="0 0 0"/>
+	</visual>
+	<collision>
+	   <geometry>
+	      <box size="0.03 0.03 0.03" />
+	   </geometry>
+           <material name="Green"/>
+           <origin rpy="0 0 0" xyz="0 0 0"/>
+	</collision>   
+   </link>
+
+   <link name="RIA_BASE_LOW" >
+	<inertial>
+	   <mass value="60"/>
+           <origin rpy=" 0 0 0" xyz="0 0 0"/>
+	   <inertia  ixx="1.522" ixy="0.033"  ixz="0.0024"  iyy="3.915"  iyz="0.000169"  izz="2.982" />
+	</inertial>
+	<visual>
+	   <geometry>
+	      <mesh filename="package://ria_description/meshes/lower_body.stl" scale="0.001 0.001 0.001" />
+	   </geometry>
+           <material name="Dark_Grey"/>
+           <origin rpy="${M_PI/2} 0 ${M_PI}" xyz="-0.03 -0.7 0"/>
+	</visual>
+	<collision>
+	   <geometry> 
+	      <mesh filename="package://ria_description/meshes/lower_body.stl" scale="0.001 0.001 0.001" />
+	   </geometry>
+           <origin rpy="${M_PI/2} 0 ${M_PI}" xyz="-0.03 -0.7 0"/>
+	</collision>      
+   </link>
+
+   <link name="RIA_BASE_TOP">
+      <inertial>
+	 <mass value="10"/>
+           <origin rpy=" 0 0 0" xyz="0 0 0"/>
+	 <inertia  ixx="0.134" ixy="0"  ixz="0"  iyy="0.3186"  iyz="0"  izz="0.1845" />
+      </inertial>
+      <visual>
+         <geometry>
+            <mesh filename="package://ria_description/meshes/upper_body.stl" scale="0.001 0.001 0.001"/>
+         </geometry>
+         <material name="Army_Green"/>
+         <origin rpy="${M_PI/2} 0 ${M_PI}" xyz="-0.03 -0.7 0"/>
+      </visual>
+      <collision>
+         <geometry>
+            <mesh filename="package://ria_description/meshes/upper_body.stl" scale="0.001 0.001 0.001"/>
+         </geometry>
+           <origin rpy="${M_PI/2} 0 ${M_PI}" xyz="-0.03 -0.7 0"/>
+      </collision>
+   </link>
+
+
+
+   <joint name="base_footprint_to_base_link" type="fixed">
+      <parent link="base_footprint"/>
+      <child link="base_link"/>
+      <origin rpy="0 0 0" xyz="0 0 0.09"/>
+   </joint>
+-->
+   <joint name="base_link_to_RIA_BASE_LOW" type="fixed">
+      <parent link="base_link"/>
+      <child link="RIA_BASE_LOW"/>
+         <origin rpy="0 0 0" xyz="0 0 0"/>
+   </joint>
+
+   <joint name="RIA_BASE_LOW_to_RIA_BASE_TOP" type="fixed">
+      <parent link="RIA_BASE_LOW"/>
+      <child link="RIA_BASE_TOP"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+   </joint>
+
+   <joint name="base_link_to_wheel_fl" type="continuous">
+      <parent link="base_link"/>
+      <child link="WHEEL_FL"/>
+      <origin rpy="0 0 0" xyz="${WHEEL_X} ${WHEEL_Y} ${WHEEL_SIZE/2 - BASE_LINK_HEIGHT}"/>
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <limit effort="200" velocity="200"/>
+      <joint_properties damping="0" friction="0"/>
+   </joint>
+   <transmission name="baselink_wheel_fl_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="base_link_to_wheel_fl" />
+      <actuator name="joint_wheel_fl_motor">
+         <hardwareInterface>EffortJointInterface</hardwareInterface>
+		<!-- hardwareInterface>VelocityJointInterface</hardwareInterface -->
+         <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+  </transmission>
+
+
+   <joint name="base_link_to_wheel_fr" type="continuous">
+      <parent link="base_link"/>
+      <child link="WHEEL_FR"/>
+      <origin rpy="0 0 0" xyz="${WHEEL_X} ${-WHEEL_Y} ${WHEEL_SIZE/2 - BASE_LINK_HEIGHT}"/>
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <limit effort="200" velocity="200"/>
+      <joint_properties damping="0" friction="0"/>
+   </joint>
+   <transmission name="baselink_wheel_fr_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="base_link_to_wheel_fr" />
+      <actuator name="joint_wheel_fr_motor">
+         <hardwareInterface>EffortJointInterface</hardwareInterface>
+		<!-- hardwareInterface>VelocityJointInterface</hardwareInterface -->
+         <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+  </transmission>
+
+   <joint name="base_link_to_wheel_bl" type="continuous">
+      <parent link="base_link"/>
+      <child link="WHEEL_BL"/>
+      <origin rpy="0 0 0" xyz="${-WHEEL_X} ${WHEEL_Y} ${WHEEL_SIZE/2 - BASE_LINK_HEIGHT}"/>
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <limit effort="200" velocity="200"/>
+      <joint_properties damping="0" friction="0"/>
+   </joint>
+   <transmission name="baselink_wheel_bl_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="base_link_to_wheel_bl" />
+      <actuator name="joint_wheel_bl_motor">
+         <hardwareInterface>EffortJointInterface</hardwareInterface>
+		<!-- hardwareInterface>VelocityJointInterface</hardwareInterface -->
+         <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+  </transmission>
+
+   <joint name="base_link_to_wheel_br" type="continuous">
+      <parent link="base_link"/>
+      <child link="WHEEL_BR"/>
+      <origin rpy="0 0 0" xyz="${-WHEEL_X} ${-WHEEL_Y} ${WHEEL_SIZE/2 - BASE_LINK_HEIGHT}"/>
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <limit effort="200" velocity="200"/>
+      <joint_properties damping="0" friction="0"/>
+   </joint>
+   <transmission name="baselink_wheel_br_trans" type="SimpleTransmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="base_link_to_wheel_br" />
+      <actuator name="joint_wheel_br_motor">
+         <hardwareInterface>EffortJointInterface</hardwareInterface>
+		<!--hardwareInterface>VelocityJointInterface</hardwareInterface -->
+         <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+  </transmission>
+
+</robot>
+
+
+
+

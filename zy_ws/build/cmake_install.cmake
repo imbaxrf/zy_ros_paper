@@ -126,6 +126,10 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/root/zy_ros_paper/zy_ws/build/gtest/cmake_install.cmake")
+  include("/root/zy_ros_paper/zy_ws/build/teleop_twist_keyboard/cmake_install.cmake")
+  include("/root/zy_ros_paper/zy_ws/build/ria_model_sim/ria_description/cmake_install.cmake")
+  include("/root/zy_ros_paper/zy_ws/build/ria_model_sim/ria_navigation/cmake_install.cmake")
+  include("/root/zy_ros_paper/zy_ws/build/ria_model_sim/ria_teleop/cmake_install.cmake")
 
 endif()
 

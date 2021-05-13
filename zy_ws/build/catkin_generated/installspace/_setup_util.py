@@ -268,7 +268,7 @@ if __name__ == '__main__':
 
         if not args.local:
             # environment at generation time
-            CMAKE_PREFIX_PATH = r'/root/e100_ws/devel;/root/r100_ws/devel;/opt/ros/kinetic'.split(';')
+            CMAKE_PREFIX_PATH = r'/root/zy_ros_paper/zy_ws/devel;/root/e100_ws/devel;/root/r100_ws/devel;/opt/ros/kinetic'.split(';')
         else:
             # don't consider any other prefix path than this one
             CMAKE_PREFIX_PATH = []

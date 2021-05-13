@@ -7,7 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/root/zy_ros_paper/zy_ws/devel:$CMAKE_PREFIX_PATH"
 export PWD='/root/zy_ros_paper/zy_ws/build'
-export ROSLISP_PACKAGE_DIRECTORIES="/root/zy_ros_paper/zy_ws/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/root/zy_ros_paper/zy_ws/src:$ROS_PACKAGE_PATH"

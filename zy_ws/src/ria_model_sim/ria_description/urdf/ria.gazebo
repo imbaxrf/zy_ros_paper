@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<robot>
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="ros_control" filename="libgazebo_ros_control.so">
+       <robotNamespace>/ria</robotNamespace>
+       <controlPeriod>0.001</controlPeriod>
+	   <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
+  
+  <gazebo>
+    <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+    <updateRate>100.0</updateRate>
+    <robotNamespace></robotNamespace>
+    <leftFrontJoint>base_link_to_wheel_fl</leftFrontJoint>  
+    <rightFrontJoint>base_link_to_wheel_fr</rightFrontJoint>
+    <leftRearJoint>base_link_to_wheel_bl</leftRearJoint>
+    <rightRearJoint>base_link_to_wheel_br</rightRearJoint>
+    <wheelSeparation>0.68</wheelSeparation>
+    <wheelDiameter>0.320</wheelDiameter>
+    <robotBaseFrame>base_link</robotBaseFrame>
+    <torque>60</torque>
+    <topicName>cmd_vel</topicName>
+    
+    <commandTopic>cmd_vel</commandTopic>
+    <odometryTopic>odom</odometryTopic>
+    <odometryFrame>odom</odometryFrame>
+    
+    <!-- broadcastTF>false</broadcastTF -->
+  </plugin>
+</gazebo>
+  
+
+  <gazebo reference="base_footprint">
+    <material>Gazebo/Green</material>
+  </gazebo>
+  
+  <gazebo reference="base_link">
+    <material>Gazebo/Red</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="RIA_BASE_LOW">
+    <material>Gazebo/FlatBlack</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="RIA_BASE_TOP">
+    <material>Gazebo/Green</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="WHEEL_BL">
+    <mu1 value="0.6"/>
+    <mu2 value="0.6"/>
+    <fdir1 value="1 0 0"/>
+			<kp value="10000000.0" />
+	<kd>100.0</kd>
+   	<maxVel>1.5</maxVel>
+
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="WHEEL_BR">
+    <mu1 value="0.6"/>
+    <mu2 value="0.6"/>
+    <fdir1 value="1 0 0"/>
+			<kp value="10000000.0" />
+	<kd>100.0</kd>
+   	<maxVel>1.5</maxVel>
+
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="WHEEL_FL">
+    <mu1 value="0.6"/>
+    <mu2 value="0.6"/>
+    <fdir1 value="1 0 0"/>
+			<kp value="10000000.0" />
+	<kd>100.0</kd>
+   	<maxVel>1.5</maxVel>
+
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="WHEEL_FR">
+    <mu1 value="0.6"/>
+    <mu2 value="0.6"/>
+    <fdir1 value="1 0 0"/>
+			<kp value="10000000.0" />
+	<kd>100.0</kd>
+   	<maxVel>1.5</maxVel>
+
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  
+</robot>
