@@ -1,22 +1,22 @@
 Determining if the pthread_create exist failed with the following output:
 Change Dir: /root/zy_ros_paper/zy_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_4ad32/fast"
-/usr/bin/make -f CMakeFiles/cmTC_4ad32.dir/build.make CMakeFiles/cmTC_4ad32.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_ad52f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ad52f.dir/build.make CMakeFiles/cmTC_ad52f.dir/build
 make[1]: Entering directory '/root/zy_ros_paper/zy_ws/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_4ad32.dir/CheckSymbolExists.c.o
-/usr/bin/cc     -o CMakeFiles/cmTC_4ad32.dir/CheckSymbolExists.c.o   -c /root/zy_ros_paper/zy_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-Linking C executable cmTC_4ad32
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4ad32.dir/link.txt --verbose=1
-/usr/bin/cc       CMakeFiles/cmTC_4ad32.dir/CheckSymbolExists.c.o  -o cmTC_4ad32 -rdynamic 
-CMakeFiles/cmTC_4ad32.dir/CheckSymbolExists.c.o：在函数‘main’中：
+Building C object CMakeFiles/cmTC_ad52f.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_ad52f.dir/CheckSymbolExists.c.o   -c /root/zy_ros_paper/zy_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_ad52f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ad52f.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_ad52f.dir/CheckSymbolExists.c.o  -o cmTC_ad52f -rdynamic 
+CMakeFiles/cmTC_ad52f.dir/CheckSymbolExists.c.o：在函数‘main’中：
 CheckSymbolExists.c:(.text+0x16)：对‘pthread_create’未定义的引用
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_4ad32.dir/build.make:97: recipe for target 'cmTC_4ad32' failed
-make[1]: *** [cmTC_4ad32] Error 1
+CMakeFiles/cmTC_ad52f.dir/build.make:97: recipe for target 'cmTC_ad52f' failed
+make[1]: *** [cmTC_ad52f] Error 1
 make[1]: Leaving directory '/root/zy_ros_paper/zy_ws/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_4ad32/fast' failed
-make: *** [cmTC_4ad32/fast] Error 2
+Makefile:126: recipe for target 'cmTC_ad52f/fast' failed
+make: *** [cmTC_ad52f/fast] Error 2
 
 File /root/zy_ros_paper/zy_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
@@ -36,20 +36,20 @@ int main(int argc, char** argv)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /root/zy_ros_paper/zy_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_bea82/fast"
-/usr/bin/make -f CMakeFiles/cmTC_bea82.dir/build.make CMakeFiles/cmTC_bea82.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_66679/fast"
+/usr/bin/make -f CMakeFiles/cmTC_66679.dir/build.make CMakeFiles/cmTC_66679.dir/build
 make[1]: Entering directory '/root/zy_ros_paper/zy_ws/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_bea82.dir/CheckFunctionExists.c.o
-/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_bea82.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
-Linking C executable cmTC_bea82
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bea82.dir/link.txt --verbose=1
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_bea82.dir/CheckFunctionExists.c.o  -o cmTC_bea82 -rdynamic -lpthreads 
+Building C object CMakeFiles/cmTC_66679.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_66679.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_66679
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_66679.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_66679.dir/CheckFunctionExists.c.o  -o cmTC_66679 -rdynamic -lpthreads 
 /usr/bin/ld: 找不到 -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_bea82.dir/build.make:97: recipe for target 'cmTC_bea82' failed
-make[1]: *** [cmTC_bea82] Error 1
+CMakeFiles/cmTC_66679.dir/build.make:97: recipe for target 'cmTC_66679' failed
+make[1]: *** [cmTC_66679] Error 1
 make[1]: Leaving directory '/root/zy_ros_paper/zy_ws/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_bea82/fast' failed
-make: *** [cmTC_bea82/fast] Error 2
+Makefile:126: recipe for target 'cmTC_66679/fast' failed
+make: *** [cmTC_66679/fast] Error 2
 
 

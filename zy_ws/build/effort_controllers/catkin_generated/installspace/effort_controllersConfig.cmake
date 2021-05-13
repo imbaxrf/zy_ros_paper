@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /root/zy_ros_paper/zy_ws/install/lib;/root/zy_ros_paper/zy_ws/devel/lib;/root/e100_ws/devel/lib;/root/r100_ws/devel/lib;/opt/ros/kinetic/lib)
+    foreach(path /root/zy_ros_paper/zy_ws/install/lib;/root/e100_ws/devel/lib;/root/r100_ws/devel/lib;/opt/ros/kinetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

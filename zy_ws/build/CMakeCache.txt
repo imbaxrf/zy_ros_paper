@@ -382,15 +382,6 @@ forward_command_controller_DIR:PATH=/root/zy_ros_paper/zy_ws/devel/share/forward
 //Value Computed by CMake
 forward_command_controller_SOURCE_DIR:STATIC=/root/zy_ros_paper/zy_ws/src/forward_command_controller
 
-//Value Computed by CMake
-four_wheel_steering_controller_BINARY_DIR:STATIC=/root/zy_ros_paper/zy_ws/build/four_wheel_steering_controller
-
-//Value Computed by CMake
-four_wheel_steering_controller_SOURCE_DIR:STATIC=/root/zy_ros_paper/zy_ws/src/four_wheel_steering_controller
-
-//The directory containing a CMake configuration file for four_wheel_steering_msgs.
-four_wheel_steering_msgs_DIR:PATH=four_wheel_steering_msgs_DIR-NOTFOUND
-
 //The directory containing a CMake configuration file for gencpp.
 gencpp_DIR:PATH=/opt/ros/kinetic/share/gencpp/cmake
 
