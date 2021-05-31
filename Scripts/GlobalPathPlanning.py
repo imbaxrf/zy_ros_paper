@@ -2,7 +2,7 @@ import requests
 import json
 from urllib.request import urlopen
 import sys
-import math
+
 
 ak = 'ts61soG2UcAhPP00rMq0KixlCMKX4z9M'
 
@@ -121,6 +121,7 @@ def print_coords_to_file(json_data, file_name):
     for line in lines:
         line = line.replace(";","\n")
         fw.write(line)
+    fw.close()
     fr.close()
     print("\033[32mCreated " + file_name + " for MATLAB.\033[0m")
 
@@ -153,7 +154,6 @@ def coords_trans(lat,lng,coords_from=1,coords_to=5):
     return lat,lng
 
 if __name__ == "__main__":
-    add = '南京理工大学-4号门'
     json_data = get_DirectionLite_driving_json_data("南京理工大学","南京农业大学")
     print_coords_to_file(json_data, "path_data.txt")
     lat,lng = get_coords("下马坊-地铁站")
@@ -162,6 +162,5 @@ if __name__ == "__main__":
     print("gcj02ll: lat: %s , lng: %s "%(lat,lng))
     lat,lng = coords_trans(lat,lng,3,5)
     print("bd09ll:  lat: %s , lng: %s "%(lat,lng))
-
 
 #bd09ll:      lat:  32.04413425286225 lng:  118.85276141456676
