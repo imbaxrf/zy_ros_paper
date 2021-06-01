@@ -7,6 +7,10 @@ import sys
 ak = 'ts61soG2UcAhPP00rMq0KixlCMKX4z9M'
 
 
+def ZY_LOG(*args,**kwargs):
+    print(*args,**kwargs)
+
+
 def get_coords(address, ret_coordtype='bd09ll'):
     """
     获取某一地点名称对应的坐标
@@ -22,7 +26,7 @@ def get_coords(address, ret_coordtype='bd09ll'):
         lat = json_data['result']['location']['lat'] #纬度
         lng = json_data['result']['location']['lng'] #经度
     else:
-        print("\033[31mRequest Failed in function %s().\033[0m" %(sys._getframe().f_code.co_name))
+        ZY_LOG("\033[31mRequest Failed in function %s().\033[0m" %(sys._getframe().f_code.co_name))
         return -1,-1    
     return lat,lng
 
@@ -56,9 +60,9 @@ def get_DirectionLite_driving_json_data(*args, in_coordtype='bd09ll',ret_coordty
     res = req.read().decode()
     json_data = json.loads(res)
     if json_data['status']!=0:
-        print("\033[31mRequest Failed in function %s().\033[0m" %(sys._getframe().f_code.co_name))
+        ZY_LOG("\033[31mRequest Failed in function %s().\033[0m" %(sys._getframe().f_code.co_name))
     else:
-        print("\033[32mGet Json successfully in from '%s,%s' to '%s,%s' in %s coordinate system.\033[0m"%(olat,olng,dlat,dlng,ret_coordtype))
+        ZY_LOG("\033[32mGet Json successfully in from '%s,%s' to '%s,%s' in %s coordinate system.\033[0m"%(olat,olng,dlat,dlng,ret_coordtype))
     return json_data
 
 
@@ -90,7 +94,7 @@ def get_path_info(json_data,index):
         path_info = {'origin_lng':origin_lng,'origin_lat':origin_lat,'destination_lng':destination_lng,'destination_lat':destination_lat,'total_distance':total_distance,'total_duration':total_duration,'leg_index':leg_index,'direction':direction,'turn':turn,'distance':distance,'duration':duration,'road_types':road_types,'instruction':instruction,'start_loaction_lng':start_loaction_lng,'start_loaction_lat':start_loaction_lat,'end_loaction_lng':end_loaction_lng,'end_loaction_lat':end_loaction_lat,'path':path,'traffic_condition_status':traffic_condition_status,'traffic_condition_geo_cnt':traffic_condition_geo_cnt}   
     
     except Exception as e:
-        print("\033[31mCatch Exception: \033[0m",e)
+        ZY_LOG("\033[31mCatch Exception: \033[0m",e)
         return path_ERR
     return path_info
 
@@ -113,7 +117,7 @@ def print_coords_to_file(json_data, file_name):
     fw = open(file_name,"w")
     for i in range(steps):
         dist = get_path_info(json_data,i)
-        print(dist["path"]+";",file=fw)
+        ZY_LOG(dist["path"]+";",file=fw)
     fw.close()
     fr = open(file_name,"r")
     lines = fr.readlines()
@@ -123,7 +127,7 @@ def print_coords_to_file(json_data, file_name):
         fw.write(line)
     fw.close()
     fr.close()
-    print("\033[32mCreated " + file_name + " for MATLAB.\033[0m")
+    ZY_LOG("\033[32mCreated " + file_name + " for MATLAB.\033[0m")
 
 
 def coords_trans(lat,lng,coords_from=1,coords_to=5):
@@ -149,7 +153,7 @@ def coords_trans(lat,lng,coords_from=1,coords_to=5):
         lng = json_data['result'][0]['x'] #经度
         lat = json_data['result'][0]['y'] #纬度
     else:
-        print("\033[31mRequest Failed in function %s().\033[0m" %(sys._getframe().f_code.co_name))
+        ZY_LOG("\033[31mRequest Failed in function %s().\033[0m" %(sys._getframe().f_code.co_name))
         return -1,-1    
     return lat,lng
 
@@ -157,10 +161,11 @@ if __name__ == "__main__":
     json_data = get_DirectionLite_driving_json_data("南京理工大学","南京农业大学")
     print_coords_to_file(json_data, "path_data.txt")
     lat,lng = get_coords("下马坊-地铁站")
-    print("bd09ll:  lat: %s , lng: %s "%(lat,lng))
+    ZY_LOG("bd09ll:  lat: %s , lng: %s "%(lat,lng))
     lat,lng = get_coords("下马坊-地铁站","gcj02ll")
-    print("gcj02ll: lat: %s , lng: %s "%(lat,lng))
+    ZY_LOG("gcj02ll: lat: %s , lng: %s "%(lat,lng))
     lat,lng = coords_trans(lat,lng,3,5)
-    print("bd09ll:  lat: %s , lng: %s "%(lat,lng))
+    ZY_LOG("bd09ll:  lat: %s , lng: %s "%(lat,lng))
+    
 
 #bd09ll:      lat:  32.04413425286225 lng:  118.85276141456676
