@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication,QMainWindow
-from HMI.Ui_HMI import *
+from Ui_HMI import *
 #import Ui_untitled 
 
 class HMI(QMainWindow, Ui_MainWindow): 
