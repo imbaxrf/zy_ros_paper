@@ -5,7 +5,6 @@ from urllib.request import urlopen
 import requests
 import json
 import sys
-import time
 
 
 ak = 'ts61soG2UcAhPP00rMq0KixlCMKX4z9M'
@@ -160,17 +159,6 @@ def coords_trans(lat,lng,coords_from=1,coords_to=5):
         return -1,-1    
     return lat,lng
 
-
-def get_time_stamp():
-    ct = time.time()
-    local_time = time.localtime(ct)
-    data_head = time.strftime("%Y-%m-%d %H:%M:%S", local_time)
-    data_secs = (ct - int(ct)) * 1000
-    time_stamp = "%s.%03d" % (data_head, data_secs)
-    #print(time_stamp)
-    #stamp = ("".join(time_stamp.split()[0].split("-"))+"".join(time_stamp.split()[1].split(":"))).replace('.', '')
-    #print(stamp)
-    return time_stamp
 
 if __name__ == "__main__":
     json_data = get_DirectionLite_driving_json_data("南京理工大学","南京农业大学")
