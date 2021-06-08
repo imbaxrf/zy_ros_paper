@@ -49,11 +49,14 @@ def get_DirectionLite_driving_json_data(*args, in_coordtype='bd09ll',ret_coordty
         destination = args[1]
         olat,olng = get_coords(origin)
         dlat,dlng = get_coords(destination)
+        print("\033[32mPlanning Path from '%s' to '%s'.\033[0m"%(origin,destination))
+        print("\033[32mPlanning Path from '%s,%s' to '%s,%s' in %s coordinate system.\033[0m"%(olat,olng,dlat,dlng,ret_coordtype))
     elif len(args) == 4:
         olat = args[0]
         olng = args[1]
         dlat = args[2]
         dlng = args[3]
+        print("\033[32mPlanning Path from '%s,%s' to '%s,%s' in %s coordinate system.\033[0m"%(olat,olng,dlat,dlng,ret_coordtype))
     url = 'http://api.map.baidu.com/directionlite/v1/driving?origin={olat},{olng}&destination={dlat},{dlng}&ak={ak}&coord_type={in_coordtype}&ret_coordtype={ret_coordtype}'.format(olat=olat, olng=olng, dlat=dlat, dlng=dlng, ak=ak, in_coordtype=in_coordtype, ret_coordtype=ret_coordtype) 
     req = urlopen(url)
     res = req.read().decode()
@@ -61,7 +64,7 @@ def get_DirectionLite_driving_json_data(*args, in_coordtype='bd09ll',ret_coordty
     if json_data['status']!=0:
         print("\033[31mRequest Failed in function %s().\033[0m" %(sys._getframe().f_code.co_name))
     else:
-        print("\033[32mGet Json successfully in from '%s,%s' to '%s,%s' in %s coordinate system.\033[0m"%(olat,olng,dlat,dlng,ret_coordtype))
+        print("\033[32mGet Json successfully from '%s,%s' to '%s,%s' in %s coordinate system.\033[0m"%(olat,olng,dlat,dlng,ret_coordtype))
     return json_data
 
 
@@ -156,9 +159,10 @@ def coords_trans(lat,lng,coords_from=1,coords_to=5):
         return -1,-1    
     return lat,lng
 
+
 if __name__ == "__main__":
-    json_data = get_DirectionLite_driving_json_data("南京理工大学","南京农业大学")
-    print_coords_to_file(json_data, "path_data.txt")
+    json_data = get_DirectionLite_driving_json_data("孝陵卫地铁站","下马坊地铁站")
+    print_coords_to_file(json_data, "coords.txt")
     lat,lng = get_coords("下马坊-地铁站")
     print("bd09ll:  lat: %s , lng: %s "%(lat,lng))
     lat,lng = get_coords("下马坊-地铁站","gcj02ll")

@@ -3,7 +3,7 @@ clear
 close all
 
 %load aaa.txt
-coords = load("path_data.txt");
+coords = load("coords.txt");
 figure
 xlabel("Longitude")
 ylabel("Latitude")
