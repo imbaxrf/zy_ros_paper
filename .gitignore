@@ -2,4 +2,6 @@
 /zy_ws/devel
 /Scripts/UFLD
 /Scripts/YOLO
+/Scripts/UFLD_YOLO/logs
+/Scripts/UFLD_YOLO/weight
 /Scripts/dnn
