@@ -7,11 +7,8 @@ from utils.baidu_utils import *
 from utils.requset_handler import *
 
 
-def run_UFLD():
-    os.system("cd UFLD && python main_ufld.py")
-
-def run_YOLO():
-    os.system("cd YOLO && python main_yolo.py")
+def run_vision_module():
+    os.system("cd UFLD_YOLO && python main_ufld_yolo.py")
 
 def tcp_req_handler(ip,port):
     server = socketserver.ThreadingTCPServer((ip,port), ReqHandlerTCP)
