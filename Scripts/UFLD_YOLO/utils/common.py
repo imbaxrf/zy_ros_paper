@@ -47,6 +47,18 @@ def get_args():
     parser.add_argument('--test_model', default = 'logs/tusimple_18.pth', type = str)
     parser.add_argument('--test_work_dir', default = None, type = str)
     parser.add_argument('--num_lanes', default = None, type = int)
+    
+    parser.add_argument('-ip', type=str, default='127.0.0.1',
+                        help='ip to vehicle.', dest='ip')
+    parser.add_argument('-port', type=int,
+                        default=4444,
+                        help='port to vehicle', dest='port')
+    parser.add_argument('-shm', type=str,
+                        default='aaa',
+                        help='shared memory name', dest='shm')
+    parser.add_argument('-onlinemode', type=bool,
+                        default=True,
+                        help='with or without tcp', dest='onlinemode')
     return parser
 
 def merge_config():

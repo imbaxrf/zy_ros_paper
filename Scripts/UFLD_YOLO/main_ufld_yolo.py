@@ -30,10 +30,11 @@ os.chdir(sys.path[0])
 #main
 from multiprocessing import shared_memory
 from math import atan
+import socket
+
 
 #function
 def load_net_UFLD():
-
     torch.backends.cudnn.benchmark = True
     args, cfg = merge_config()
     #dist_print('start testing...')
@@ -76,6 +77,7 @@ def load_net_YOLO(cfgfile, weightfile):
     print("\033[32mYOLO Loaded!\033[0m")
     return m
 
+
 #UFLD function
 def is_in_poly(p, poly):
     """
@@ -102,6 +104,7 @@ def is_in_poly(p, poly):
             elif x > px:  # if point is on left-side of line
                 is_in = True
     return is_in
+
 
 def handle_point(x, y):
     """
@@ -138,6 +141,8 @@ def handle_point(x, y):
             rx.append(x[i])
             ry.append(y[i])
     return lx, ly, rx, ry
+
+
 def poly_fitting(img,lx, ly, rx, ry):
     """
     分别对两部分控制点进行二次多项式拟合
@@ -185,7 +190,34 @@ def draw_values(img,distance_from_center):
     cv2.putText(img,center_text,(20,80), font, 1,(255,255,255),2)
     return img
 
-if __name__ == "__main__":
+
+def get_work_args():
+    parser = argparse.ArgumentParser('Address to Vehicle and Shared Memory Name')
+    parser.add_argument('-ip', type=str, default='127.0.0.1',
+                        help='ip to vehicle.', dest='ip')
+    parser.add_argument('-port', type=int,
+                        default=4444,
+                        help='port to vehicle', dest='port')
+    parser.add_argument('-shm', type=str,
+                        default='aaa',
+                        help='shared memory name', dest='shm')
+    parser.add_argument('-onlinemode', type=bool,
+                        default=True,
+                        help='with or without tcp', dest='onlinemode')
+    args = parser.parse_args()
+    return args
+
+def start_work(ip,port,shm_name,online_mode):
+    if online_mode == True:
+        try:
+            client = socket.socket()
+            client.connect((ip,port))
+            print("\033[32mConnected to Vehicle.\033[0m")
+        except:
+            print("\033[31mCan not connect to Vehicle! Please restart!\033[0m")
+            return
+    else:
+        pass
     m = load_net_YOLO("./cfg/yolov4.cfg","./weight/yolov4.weights")
     net = load_net_UFLD()
     #YOLO===============================================================================
@@ -220,12 +252,9 @@ if __name__ == "__main__":
     print("\033[32mStarting the UFLD...\033[0m".format(torch.cuda.is_available()))
     poly = [(0, cap.get(4)), (460, 325), (520,350), (cap.get(3), cap.get(4))]
     
-    #TODO 共享内存通信
-    #目前用于只传输k
-    shm_a = shared_memory.ShareableList([0,0,0,0],name = "aaa")
+    #共享内存通信 x1 x2 y1 y2 k rad
+    shm_a = shared_memory.ShareableList([0,0,0,0,0,0],name = shm_name)
     
-
-
     while True:
         t1 = time.time()
         # 提取筛选后的车道线点
@@ -314,29 +343,46 @@ if __name__ == "__main__":
         else:
             for line in lines:
                 x1, y1, x2, y2 = line[0]
-                #TODO 共享内存通信 x1 y1 x2 y2
-                #num = line[0].tolist()
-                #shm_a[0] = num[0]
-                #shm_a[1] = num[1]
-                #shm_a[2] = num[2]
-                #shm_a[3] = num[3]
                 cv2.line(result, (x1, y1), (x2, y2), (0, 0, 255), 1, lineType = cv2.LINE_AA)
                 k = (y2-y1) / (x2-x1)
-                print("\033[34mRadian:\033[0m",atan(k)/np.pi)
-                #shm_a[0] = atan(k)/np.pi
+                #装入共享内存通信 x1 y1 x2 y2
+                num = line[0].tolist()
+                shm_a[0] = num[0]
+                shm_a[1] = num[1]
+                shm_a[2] = num[2]
+                shm_a[3] = num[3]
+                shm_a[4] = float(k)
+                shm_a[5] = atan(k)/np.pi
+                #print(str(line[0]).split()[1])
+                #print("\033[34mRadian:\033[0m",atan(k)/np.pi)
+                if online_mode == True:
+                    try:
+                        send_data = str(shm_a[5])
+                        client.send(send_data.encode('utf-8'))
+                    except:
+                        print("\033[31mConnection Error! Please restart!\033[0m")
+                        return
+
                 #a = shared_memory.ShareableList(name = "aaa")
                 #print(a)
         
-        #=========================================================================================
-        #a = shared_memory.ShareableList(name = "aaa")
-        #print(a)
-
         cv2.imshow('result', result)
-        
+
         if cv2.waitKey(1) == 27:
             break
-        
+
         if video_write:
             vout.write(frame)
+    
+    if online_mode == True:
+        try:
+            client.close()
+        except:
+            print("\033[31mConnection Error! Please restart!\033[0m")
+            return
 
-
+if __name__ == "__main__":
+    args = get_work_args()
+    print(args)
+    start_work(args.ip, args.port, args.shm, args.onlinemode)
+    #start_work("127.0.0.1", 4444, "aaa", True)
