@@ -7,13 +7,10 @@ from utils.baidu_utils import *
 from utils.requset_handler import *
 
 
-def run_UFLD():
-    os.system("cd UFLD && python main_ufld.py")
+def run_vision_module():
+    os.system("cd UFLD_YOLO && python main_ufld_yolo.py")
 
-def run_YOLO():
-    os.system("cd YOLO && python main_yolo.py")
-
-def tcp_req_handler(ip,port):
+def tcp_req_handler(ip,port):#TODO改成发送 并集成在ufld yolo里
     server = socketserver.ThreadingTCPServer((ip,port), ReqHandlerTCP)
     server.serve_forever() # 永久循环执行
 
@@ -27,8 +24,7 @@ def print_time( threadName, delay):
 
 if __name__ == "__main__":
     try:
-        _thread.start_new_thread(run_UFLD,())
-        _thread.start_new_thread(run_YOLO,())
+        _thread.start_new_thread( run_vision_module,())
         _thread.start_new_thread( tcp_req_handler,("127.0.0.1",4444))
     except:
         print("无法启动线程")
