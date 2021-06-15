@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+#for python 2.7
+from __future__ import print_function
 import socketserver
 
 class ReqHandlerTCP(socketserver.BaseRequestHandler):
