@@ -62,6 +62,9 @@ def get_args():
     parser.add_argument('-testmode', type=bool,
                         default=False,
                         help='open test video or not', dest='testmode')
+    parser.add_argument('-shmid', type=int,
+                        default=0,
+                        help='index to shm', dest='shmid')
     return parser
 
 def merge_config():

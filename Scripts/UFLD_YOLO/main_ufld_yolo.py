@@ -207,14 +207,17 @@ def get_work_args():
     parser.add_argument('-testmode', type=bool,
                         default=False,
                         help='open test video or not', dest='testmode')
+    parser.add_argument('-shmid', type=int,
+                        default=0,
+                        help='index to shm', dest='shmid')
     args = parser.parse_args()
     return args
 
-def start_work(ip,port,shm_name,offline_mode,test_mode):
+def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
 
 
     if offline_mode == True:
-        print("\033[33mRunning in offline mode.\033[0m")
+        print("\033[34mRunning in offline mode.\033[0m")
     else:
         try:
             client = socket.socket()
@@ -370,24 +373,22 @@ def start_work(ip,port,shm_name,offline_mode,test_mode):
                 #shm_a[3] = num[3]
                 angle_sum = angle_sum + atan(k_inverse)
                 #print(atan(kk)+90)
-                #shm_a[5] = atan(k)/np.pi
-                #print(str(line[0]).split()[1])
-                #print("\033[34mRadian:\033[0m",atan(k)/np.pi)                
+                #shm_a[5] = atan(k)/np.pi               
             angle_avg = angle_sum / len(lines)
-
+            shm_a[shm_id] = angle_avg
             if offline_mode == True:
                 pass
             else:
                 send_data = str(angle_avg)
                 client.send(send_data.encode('utf-8'))
-   
+
         cv2.imshow('result', result)
         if cv2.waitKey(1) == 27:
             break
         if video_write:
             vout.write(frame)
 
-    shm_a[6] = "quit" #标识工作结束 
+    shm_a[shm_id] = "quit" #标识工作结束 
     send_data = "quit"
     client.send(send_data.encode('utf-8'))
     client.close()
@@ -396,5 +397,5 @@ def start_work(ip,port,shm_name,offline_mode,test_mode):
 if __name__ == "__main__":
     args = get_work_args()
     print(args)
-    start_work(args.ip, args.port, args.shm, args.offlinemode,args.testmode)
+    start_work(args.ip, args.port, args.shm, args.offlinemode,args.testmode,args.shmid)
     #start_work("127.0.0.1", 4444, "aaa", True)
