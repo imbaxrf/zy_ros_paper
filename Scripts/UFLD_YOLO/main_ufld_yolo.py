@@ -201,14 +201,21 @@ def get_work_args():
     parser.add_argument('-shm', type=str,
                         default='aaa',
                         help='shared memory name', dest='shm')
-    parser.add_argument('-onlinemode', type=bool,
-                        default=True,
-                        help='with or without tcp', dest='onlinemode')
+    parser.add_argument('-offlinemode', type=bool,
+                        default=False,
+                        help='with or without tcp', dest='offlinemode')
+    parser.add_argument('-testmode', type=bool,
+                        default=False,
+                        help='open test video or not', dest='testmode')
     args = parser.parse_args()
     return args
 
-def start_work(ip,port,shm_name,online_mode):
-    if online_mode == True:
+def start_work(ip,port,shm_name,offline_mode,test_mode):
+
+
+    if offline_mode == True:
+        print("\033[33mRunning in offline mode.\033[0m")
+    else:
         try:
             client = socket.socket()
             client.connect((ip,port))
@@ -216,8 +223,10 @@ def start_work(ip,port,shm_name,online_mode):
         except:
             print("\033[31mCan not connect to Vehicle! Please restart!\033[0m")
             return
-    else:
-        pass
+    #共享内存通信
+    shm_a = shared_memory.ShareableList(name = shm_name)
+    print("\033[32mLinked Shared Memory.\033[0m")
+
     m = load_net_YOLO("./cfg/yolov4.cfg","./weight/yolov4.weights")
     net = load_net_UFLD()
     #YOLO===============================================================================
@@ -231,14 +240,20 @@ def start_work(ip,port,shm_name,online_mode):
         namesfile = 'data/x.names'
     class_names = load_class_names(namesfile)
     #UFLD===============================================================================
-    test_video = './project_video.mp4'
+    
     args, cfg = merge_config()
     img_transforms = transforms.Compose([
         transforms.Resize((288, 800)),
         transforms.ToTensor(),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ])
-    cap = cv2.VideoCapture(test_video)
+    if test_mode == True:
+        test_video = './project_video.mp4'
+        cap = cv2.VideoCapture(test_video)
+    else:
+        cap = cv2.VideoCapture(0)
+        cap.set(3,1280) #设置分辨率
+        cap.set(4,720)
     fps = 0.0
     # 是否保存视频
     video_write = False
@@ -252,8 +267,6 @@ def start_work(ip,port,shm_name,online_mode):
     print("\033[32mStarting the UFLD...\033[0m".format(torch.cuda.is_available()))
     poly = [(0, cap.get(4)), (460, 325), (520,350), (cap.get(3), cap.get(4))]
     
-    #共享内存通信 x1 x2 y1 y2 k rad
-    shm_a = shared_memory.ShareableList([0,0,0,0,0,0],name = shm_name)
     
     while True:
         t1 = time.time()
@@ -262,6 +275,7 @@ def start_work(ip,port,shm_name,online_mode):
         lane_y = []
 
         rval, frame = cap.read()
+        #frame = cv2.resize(frame,(1280,720))
         if rval == False:
             break
 
@@ -310,6 +324,7 @@ def start_work(ip,port,shm_name,online_mode):
         lx, ly, rx, ry = handle_point(lane_x, lane_y)
         try:
             distance_from_center,num = poly_fitting(frame,lx, ly, rx, ry)
+            #print(num)
         except:
             pass
 
@@ -341,48 +356,45 @@ def start_work(ip,port,shm_name,online_mode):
         if type(lines)==NoneType:
             pass
         else:
+            angle_sum = 0.0
             for line in lines:
                 x1, y1, x2, y2 = line[0]
                 cv2.line(result, (x1, y1), (x2, y2), (0, 0, 255), 1, lineType = cv2.LINE_AA)
-                k = (y2-y1) / (x2-x1)
+                #k = (y2-y1) / (x2-x1)
+                k_inverse = (x2-x1) / (y2-y1)
                 #装入共享内存通信 x1 y1 x2 y2
-                num = line[0].tolist()
-                shm_a[0] = num[0]
-                shm_a[1] = num[1]
-                shm_a[2] = num[2]
-                shm_a[3] = num[3]
-                shm_a[4] = float(k)
-                shm_a[5] = atan(k)/np.pi
+                #num = line[0].tolist()
+                #shm_a[0] = num[0]
+                #shm_a[1] = num[1]
+                #shm_a[2] = num[2]
+                #shm_a[3] = num[3]
+                angle_sum = angle_sum + atan(k_inverse)
+                #print(atan(kk)+90)
+                #shm_a[5] = atan(k)/np.pi
                 #print(str(line[0]).split()[1])
-                #print("\033[34mRadian:\033[0m",atan(k)/np.pi)
-                if online_mode == True:
-                    try:
-                        send_data = str(shm_a[5])
-                        client.send(send_data.encode('utf-8'))
-                    except:
-                        print("\033[31mConnection Error! Please restart!\033[0m")
-                        return
+                #print("\033[34mRadian:\033[0m",atan(k)/np.pi)                
+            angle_avg = angle_sum / len(lines)
 
-                #a = shared_memory.ShareableList(name = "aaa")
-                #print(a)
-        
+            if offline_mode == True:
+                pass
+            else:
+                send_data = str(angle_avg)
+                client.send(send_data.encode('utf-8'))
+   
         cv2.imshow('result', result)
-
         if cv2.waitKey(1) == 27:
             break
-
         if video_write:
             vout.write(frame)
-    
-    if online_mode == True:
-        try:
-            client.close()
-        except:
-            print("\033[31mConnection Error! Please restart!\033[0m")
-            return
+
+    shm_a[6] = "quit" #标识工作结束 
+    send_data = "quit"
+    client.send(send_data.encode('utf-8'))
+    client.close()
+    shm_a.shm.close()
 
 if __name__ == "__main__":
     args = get_work_args()
     print(args)
-    start_work(args.ip, args.port, args.shm, args.onlinemode)
+    start_work(args.ip, args.port, args.shm, args.offlinemode,args.testmode)
     #start_work("127.0.0.1", 4444, "aaa", True)

@@ -56,9 +56,12 @@ def get_args():
     parser.add_argument('-shm', type=str,
                         default='aaa',
                         help='shared memory name', dest='shm')
-    parser.add_argument('-onlinemode', type=bool,
-                        default=True,
-                        help='with or without tcp', dest='onlinemode')
+    parser.add_argument('-offlinemode', type=bool,
+                        default=False,
+                        help='with or without tcp', dest='offlinemode')
+    parser.add_argument('-testmode', type=bool,
+                        default=False,
+                        help='open test video or not', dest='testmode')
     return parser
 
 def merge_config():
