@@ -116,7 +116,7 @@ def get_steps_num(json_data):
 
 def print_coords_to_file(json_data, file_name, pure_waypoint = True):
     '''
-    pure_waypoint参数用来打印连续不间断的路径点
+    pure_waypoint参数用来打印连续不间断的路径点，不使用此参数则分路段间隔输出
     '''
     steps = get_steps_num(json_data)
     fw = open(file_name,"w")
@@ -178,26 +178,29 @@ def coords_trans(lat,lng,coords_from=1,coords_to=5):
         return -1,-1    
     return lat,lng
 
-def trans_to_bd09mc_file(file_name):
+def trans_to_bd09mc_file(file_name,saved_name,coords_from=1,coords_to=6):
+    """
+    输出是bd09mc坐标，参数保持默认不用改
+    """
     fr = open(file_name,"r")
     lines = fr.readlines()
     print("\033[32m"+str(len(lines))+" coords in total.\033[0m")
-    fw = open(file_name,"w")
+    fw = open(saved_name,"w")
     for i,line in enumerate(lines):
-        lat,lng = coords_trans(line.split(",")[1],line.split(",")[0],1,6)
+        lat,lng = coords_trans(line.split(",")[1],line.split(",")[0],coords_from,coords_to)
         print("\033[32m"+str(i+1)+" coords transfered.\033[0m",end='\r')
         line = str(lat)+","+str(lng)+'\n'
         fw.write(line)
     fw.close()
     fr.close()
-    print("\033[32mTransfered " + file_name + " in bd09mc.\033[0m")
+    print("\033[32mTransfered %s in bd09mc, saved to %s.\033[0m"%(file_name,saved_name))
 
 
 
 if __name__ == "__main__":
     json_data = get_DirectionLite_driving_json_data("孝陵卫地铁站","下马坊地铁站")
     print_coords_to_file(json_data, "../coords.txt")
-    trans_to_bd09mc_file("../coords.txt")
+    trans_to_bd09mc_file("../coords.txt","../coords_bd09mc.txt")
     lat,lng = get_coords("下马坊-地铁站")
     print("bd09ll:  lat: %s , lng: %s "%(lat,lng))
     lat,lng = get_coords("下马坊-地铁站","gcj02ll")

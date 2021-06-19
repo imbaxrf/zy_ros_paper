@@ -217,18 +217,19 @@ def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
 
 
     if offline_mode == True:
-        print("\033[34mRunning in offline mode.\033[0m")
+        print("\033[33mRunning in offline mode.\033[0m")
     else:
         try:
+            addr = (ip,port)
             client = socket.socket()
-            client.connect((ip,port))
-            print("\033[32mConnected to Vehicle.\033[0m")
+            client.connect(addr)
+            print("\033[32mConnected to Vehicle at %s.\033[0m"%str(addr))
         except:
             print("\033[31mCan not connect to Vehicle! Please restart!\033[0m")
             return
     #共享内存通信
     shm_a = shared_memory.ShareableList(name = shm_name)
-    print("\033[32mLinked Shared Memory.\033[0m")
+    print("\033[32mLinked to ShareableList named '%s' at index '%s'.\033[0m"%(shm_name,shm_id))
 
     m = load_net_YOLO("./cfg/yolov4.cfg","./weight/yolov4.weights")
     net = load_net_UFLD()
@@ -389,5 +390,5 @@ def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
 
 if __name__ == "__main__":
     args = get_work_args()
-    print(args)
+    #print(args)
     start_work(args.ip, args.port, args.shm, args.offlinemode,args.testmode,args.shmid)

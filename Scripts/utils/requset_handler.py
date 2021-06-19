@@ -9,7 +9,7 @@ class ReqHandlerTCP(socketserver.BaseRequestHandler):
         while True:
             data = self.request.recv(1024)
             msg = data.decode('utf-8')
-            print("Recv: ", msg)
+            print("Recv: ", msg, end="\r")
             if msg[-4:] == "quit":
                 print("\033[31m%s Disconneted.\033[0m"%str(self.client_address))
                 break
