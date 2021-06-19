@@ -7,4 +7,4 @@ coords = load("coords.txt");
 figure
 xlabel("Longitude")
 ylabel("Latitude")
-plot(coords(:,1),coords(:,2))
+plot(coords(:,2),coords(:,1))

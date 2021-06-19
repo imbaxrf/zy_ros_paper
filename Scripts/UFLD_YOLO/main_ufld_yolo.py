@@ -29,7 +29,7 @@ os.chdir(sys.path[0])
 
 #main
 from multiprocessing import shared_memory
-from math import atan
+from math import atan,atan2
 import socket
 
 
@@ -309,8 +309,7 @@ def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
         out_j = np.argmax(out_j, axis=0)
         loc[out_j == cfg.griding_num] = 0
         out_j = loc
-        # import pdb; pdb.set_trace()
-        # vis = cv2.imread(os.path.join(cfg.data_root,names[0]))
+
         for i in range(out_j.shape[1]):
             if np.sum(out_j[:, i] != 0) > 2:
                 for k in range(out_j.shape[0]):
@@ -343,10 +342,6 @@ def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
         fps = (fps + (1. / (time.time() - t1))) / 2
         result = cv2.putText(result_yolo, "FPS = %.2f" % (fps), (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
         
-        #img_result是YOLO的结果 frame是UFLD的结果==================================================
-        #result = cv2.addWeighted(result_ufld,0.5,result_yolo,0.5,0)
-        #print(result.shape[0],result.shape[1])#720 1280
-        
         #霍夫变换透视变换==========================================================================
         edges = cv2.Canny(lines_image, 50, 150)
         edges_roi = edges[500:720, 0:1280]
@@ -363,7 +358,6 @@ def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
             for line in lines:
                 x1, y1, x2, y2 = line[0]
                 cv2.line(result, (x1, y1), (x2, y2), (0, 0, 255), 1, lineType = cv2.LINE_AA)
-                #k = (y2-y1) / (x2-x1)
                 k_inverse = (x2-x1) / (y2-y1)
                 #装入共享内存通信 x1 y1 x2 y2
                 #num = line[0].tolist()
@@ -372,8 +366,7 @@ def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
                 #shm_a[2] = num[2]
                 #shm_a[3] = num[3]
                 angle_sum = angle_sum + atan(k_inverse)
-                #print(atan(kk)+90)
-                #shm_a[5] = atan(k)/np.pi               
+
             angle_avg = angle_sum / len(lines)
             shm_a[shm_id] = angle_avg
             if offline_mode == True:
@@ -398,4 +391,3 @@ if __name__ == "__main__":
     args = get_work_args()
     print(args)
     start_work(args.ip, args.port, args.shm, args.offlinemode,args.testmode,args.shmid)
-    #start_work("127.0.0.1", 4444, "aaa", True)

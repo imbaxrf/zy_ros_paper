@@ -114,7 +114,10 @@ def get_steps_num(json_data):
         return steps  
 
 
-def print_coords_to_file(json_data, file_name):
+def print_coords_to_file(json_data, file_name, pure_waypoint = True):
+    '''
+    pure_waypoint参数用来打印连续不间断的路径点
+    '''
     steps = get_steps_num(json_data)
     fw = open(file_name,"w")
     for i in range(steps):
@@ -124,11 +127,27 @@ def print_coords_to_file(json_data, file_name):
     fr = open(file_name,"r")
     lines = fr.readlines()
     fw = open(file_name,"w")
-    for line in lines:
+    for i,line in enumerate(lines):
         line = line.replace(";","\n")
+        if pure_waypoint == True:
+            line = line.replace("\n",";")
+            line = line.replace(";;",";")
+            line = line.replace(";","\n")
         fw.write(line)
     fw.close()
     fr.close()
+        
+    if pure_waypoint == True: 
+        fr = open(file_name,"r")
+        lines = fr.readlines()
+        fw = open(file_name,"w")
+        for i in range(len(lines)):
+            if i < len(lines) - 1:
+                if lines[i] == lines[i+1]:
+                    lines[i] = ""
+            fw.write(lines[i])          
+        fw.close()
+        fr.close()
     print("\033[32mCreated " + file_name + " for MATLAB.\033[0m")
 
 
@@ -159,10 +178,26 @@ def coords_trans(lat,lng,coords_from=1,coords_to=5):
         return -1,-1    
     return lat,lng
 
+def trans_to_bd09mc_file(file_name):
+    fr = open(file_name,"r")
+    lines = fr.readlines()
+    print("\033[32m"+str(len(lines))+" coords in total.\033[0m")
+    fw = open(file_name,"w")
+    for i,line in enumerate(lines):
+        lat,lng = coords_trans(line.split(",")[1],line.split(",")[0],1,6)
+        print("\033[32m"+str(i+1)+" coords transfered.\033[0m",end='\r')
+        line = str(lat)+","+str(lng)+'\n'
+        fw.write(line)
+    fw.close()
+    fr.close()
+    print("\033[32mTransfered " + file_name + " in bd09mc.\033[0m")
+
+
 
 if __name__ == "__main__":
     json_data = get_DirectionLite_driving_json_data("孝陵卫地铁站","下马坊地铁站")
-    print_coords_to_file(json_data, "coords.txt")
+    print_coords_to_file(json_data, "../coords.txt")
+    trans_to_bd09mc_file("../coords.txt")
     lat,lng = get_coords("下马坊-地铁站")
     print("bd09ll:  lat: %s , lng: %s "%(lat,lng))
     lat,lng = get_coords("下马坊-地铁站","gcj02ll")
