@@ -2,6 +2,7 @@
 #from __future__ import print_function
 #from urllib import urlopen
 from urllib.request import urlopen
+from numpy.lib.function_base import i0
 import requests
 import json
 import sys
@@ -118,6 +119,8 @@ def print_coords_to_file(json_data, file_name, pure_waypoint = True):
     '''
     pure_waypoint参数用来打印连续不间断的路径点，不使用此参数则分路段间隔输出
     '''
+    coords1 = []
+    coords2 = []
     steps = get_steps_num(json_data)
     fw = open(file_name,"w")
     for i in range(steps):
@@ -134,6 +137,7 @@ def print_coords_to_file(json_data, file_name, pure_waypoint = True):
             line = line.replace(";;",";")
             line = line.replace(";","\n")
         fw.write(line)
+        coords1.append(line)
     fw.close()
     fr.close()
         
@@ -145,10 +149,15 @@ def print_coords_to_file(json_data, file_name, pure_waypoint = True):
             if i < len(lines) - 1:
                 if lines[i] == lines[i+1]:
                     lines[i] = ""
-            fw.write(lines[i])          
+            fw.write(lines[i]) 
+            coords2.append(lines[i])         
         fw.close()
         fr.close()
     print("\033[32mCreated " + file_name + " for MATLAB.\033[0m")
+    if pure_waypoint == True:
+        return coords2
+    else:
+        return coords1
 
 
 def coords_trans(lat,lng,coords_from=1,coords_to=5):
@@ -186,14 +195,17 @@ def trans_to_bd09mc_file(file_name,saved_name,coords_from=1,coords_to=6):
     lines = fr.readlines()
     print("\033[32m"+str(len(lines))+" coords in total.\033[0m")
     fw = open(saved_name,"w")
+    coords = []
     for i,line in enumerate(lines):
         lat,lng = coords_trans(line.split(",")[1],line.split(",")[0],coords_from,coords_to)
         print("\033[32m"+str(i+1)+" coords transfered.\033[0m",end='\r')
         line = str(lat)+","+str(lng)+'\n'
         fw.write(line)
+        coords.append(line)
     fw.close()
     fr.close()
     print("\033[32mTransfered %s in bd09mc, saved to %s.\033[0m"%(file_name,saved_name))
+    return coords
 
 
 

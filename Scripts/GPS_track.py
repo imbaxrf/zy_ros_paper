@@ -28,12 +28,13 @@ def get_current_ublox_gps():
     return lat,lng
 
 
-def get_current_turn_radian(file_name):
+def get_turn_radian(file_name,saved_name):
     """
     获取相对于百度地图规划出bd09mc坐标系的路线正北方向的角度
     """
     fr = open(file_name,"r")
     lines = fr.readlines()
+    #fw = open(saved_name,"w")
     rad = []
     for i in range(len(lines)-1):
         b = lines[i+1].split(",")
@@ -44,6 +45,6 @@ def get_current_turn_radian(file_name):
 
 if __name__ == "__main__":
 
-    rad = get_current_turn_radian("coords_bd09mc.txt")
+    rad = get_turn_radian("coords_bd09mc.txt",'AA')
     print(rad)
 
