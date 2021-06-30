@@ -4,7 +4,7 @@ data_root = None
 
 # TRAIN
 epoch = 100
-batch_size = 32
+batch_size = 32 #32
 optimizer = 'Adam'    #['SGD','Adam']
 # learning_rate = 0.1
 learning_rate = 4e-4
