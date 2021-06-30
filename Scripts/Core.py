@@ -1,11 +1,13 @@
 import _thread
 import os
+import sys
 from multiprocessing import shared_memory
 
 from utils.baidu_utils import *
 from utils.requset_handler import *
 from utils.time_system import *
 
+os.chdir(sys.path[0])
 
 def run_vision_module():
     os.system("cd UFLD_YOLO && python main_ufld_yolo.py -ip 127.0.0.1 -port 4444 -shm aaa -shmid 0 -testmode=True")
