@@ -213,10 +213,13 @@ def get_work_args():
     parser.add_argument('-shmid', type=int,
                         default=0,
                         help='index to shm', dest='shmid')
+    parser.add_argument('-withshm', type=bool,
+                        default=False,
+                        help='with shm or not', dest='withshm')
     args = parser.parse_args()
     return args
 
-def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
+def start_work(ip, port, shm_name, shm_id, offline_mode, test_mode, with_shm):
 
 
     if offline_mode == True:
@@ -231,8 +234,9 @@ def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
             print("\033[31mCan not connect to Vehicle! Please restart!\033[0m")
             return
     #共享内存通信
-    shm_a = shared_memory.ShareableList(name = shm_name)
-    print("\033[32mLinked to ShareableList named '%s' at index '%s'.\033[0m"%(shm_name,shm_id))
+    if with_shm == True:
+        shm_a = shared_memory.ShareableList(name = shm_name)
+        print("\033[32mLinked to ShareableList named '%s' at index '%s'.\033[0m"%(shm_name,shm_id))
 
     m = load_net_YOLO("./cfg/yolov4.cfg","./weight/yolov4.weights")
     net = load_net_UFLD()
@@ -372,7 +376,8 @@ def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
                 angle_sum = angle_sum + atan(k_inverse)
 
             angle_avg = angle_sum / len(lines)
-            shm_a[shm_id] = angle_avg
+            if with_shm == True:
+                shm_a[shm_id] = angle_avg
             if offline_mode == True:
                 pass
             else:
@@ -384,14 +389,18 @@ def start_work(ip,port,shm_name,offline_mode,test_mode,shm_id):
             break
         if video_write:
             vout.write(frame)
+    if with_shm == True:
+        shm_a[shm_id] = "quit"  #标识工作结束 
+        shm_a.shm.close()
+    if offline_mode ==True:
+        pass
+    else:
+        send_data = "quit"  #标识工作结束 
+        client.send(send_data.encode('utf-8'))
+        client.close()
 
-    shm_a[shm_id] = "quit" #标识工作结束 
-    send_data = "quit"
-    client.send(send_data.encode('utf-8'))
-    client.close()
-    shm_a.shm.close()
 
 if __name__ == "__main__":
     args = get_work_args()
     #print(args)
-    start_work(args.ip, args.port, args.shm, args.offlinemode,args.testmode,args.shmid)
+    start_work(args.ip, args.port, args.shm, args.shmid, args.offlinemode,args.testmode,args.withshm)

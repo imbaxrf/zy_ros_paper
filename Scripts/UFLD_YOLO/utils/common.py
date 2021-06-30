@@ -65,6 +65,9 @@ def get_args():
     parser.add_argument('-shmid', type=int,
                         default=0,
                         help='index to shm', dest='shmid')
+    parser.add_argument('-withshm', type=bool,
+                        default=False,
+                        help='with shm or not', dest='withshm')
     return parser
 
 def merge_config():

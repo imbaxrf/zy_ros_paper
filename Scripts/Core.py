@@ -32,7 +32,7 @@ def fake_vehicle(ip,port):
 def read_shared_memory():
     while True:
         a = shared_memory.ShareableList(name = "aaa")
-        #print(a)
+        #print(a,end="\r")
         if a[0] == "quit":
             print("END")
             break
@@ -41,12 +41,11 @@ def read_shared_memory():
 
 if __name__ == "__main__":
 
-    shm_a = shared_memory.ShareableList([0,0,0,0,0,0,0],name = "aaa")
-
+    #shm_a = shared_memory.ShareableList([0,0,0,0,0,0,0],name = "aaa")
     print(get_time_stamp())
     try:
         _thread.start_new_thread( run_vision_module,())
-        _thread.start_new_thread( read_shared_memory,())
+        #_thread.start_new_thread( read_shared_memory,())
         _thread.start_new_thread( fake_vehicle,('127.0.0.1',4444)) #实际上这应该是小车，这里做的是环回测试，故使用4444
         _thread.start_new_thread( tcp_req_handler,('127.0.0.1',5555)) 
     except:
@@ -54,11 +53,8 @@ if __name__ == "__main__":
         #shm_a.shm.close()
         #shm_a.shm.unlink()    
     while 1:
-        a = shared_memory.ShareableList(name = "aaa")
-        #print(a)
-        if a[0] == "quit":
-            print("END")
-            break
-    a.shm.close()
-    shm_a.shm.close()
-    shm_a.shm.unlink()
+        pass
+        #a = shared_memory.ShareableList(name = "aaa")
+        #if a[0] == "quit":
+            #print("END")
+            #break
