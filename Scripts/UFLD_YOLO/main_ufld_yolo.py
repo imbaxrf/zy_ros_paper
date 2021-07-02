@@ -1,5 +1,5 @@
-import sys
-sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+#import sys
+#sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
 
 #UFLD
 from cryptography.hazmat.primitives.asymmetric.padding import PSS

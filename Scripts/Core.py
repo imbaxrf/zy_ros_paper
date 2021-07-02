@@ -3,8 +3,8 @@
 import _thread
 import os
 import sys
-os.chdir(sys.path[0])
-sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
+#os.chdir(sys.path[0])
+#sys.path.remove('/opt/ros/kinetic/lib/python2.7/dist-packages')
 from multiprocessing import shared_memory
 
 from utils.baidu_utils import *
