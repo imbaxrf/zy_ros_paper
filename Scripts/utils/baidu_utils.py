@@ -210,7 +210,7 @@ def trans_to_bd09mc_file(file_name,saved_name,coords_from=1,coords_to=6):
 
 
 if __name__ == "__main__":
-    json_data = get_DirectionLite_driving_json_data("孝陵卫地铁站","下马坊地铁站")
+    json_data = get_DirectionLite_driving_json_data(32.030373,118.868523,32.032642,118.865648)
     print_coords_to_file(json_data, "../coords.txt")
     trans_to_bd09mc_file("../coords.txt","../coords_bd09mc.txt")
     lat,lng = get_coords("下马坊-地铁站")
