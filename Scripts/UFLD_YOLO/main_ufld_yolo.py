@@ -190,7 +190,7 @@ def draw_values(img,distance_from_center):
     else:
         pos_flag= 'left'
     center_text = "Vehicle is %.3fm %s of center"%(abs(distance_from_center),pos_flag)
-    cv2.putText(img,center_text,(20,80), font, 1,(255,255,255),2)
+    cv2.putText(img,center_text,(20,80), font, 1,(255,255,255),1)
     return img
 
 
@@ -286,7 +286,7 @@ def start_work(ip, port, shm_name, shm_id, offline_mode, test_mode, with_shm):
         lane_y = []
 
         rval, frame = cap.read()
-        #frame = cv2.resize(frame,(1280,720))
+        #frame = cv2.resize(frame,(1280,720))最好别动这个 因为后面逆透视变换用的参数按着1280 720来的
         if rval == False:
             break
 
@@ -348,7 +348,7 @@ def start_work(ip, port, shm_name, shm_id, offline_mode, test_mode, with_shm):
             cv2.circle(lines_image,num[i], 3, (0,255,0), -1)
         draw_values(result_yolo,distance_from_center)
         fps = (fps + (1. / (time.time() - t1))) / 2
-        result = cv2.putText(result_yolo, "FPS = %.2f" % (fps), (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+        result = cv2.putText(result_yolo, "FPS = %.2f" % (fps), (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
         
         #霍夫变换透视变换==========================================================================
         edges = cv2.Canny(lines_image, 50, 150)
